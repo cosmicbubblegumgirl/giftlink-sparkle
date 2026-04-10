@@ -1,0 +1,1 @@
+GiftLink Sparkle project bundle.
