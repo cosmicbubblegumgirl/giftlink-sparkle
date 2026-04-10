@@ -1,3 +1,10 @@
+// giftlink-backend/app.js
+const connectDB = require('./db');
+
+connectDB().then(() => {
+  // Your Express app startup
+  // e.g., app.listen(PORT, () => console.log('Server running'))
+});
 /* jshint esversion: 11, node: true */
 const express = require('express');
 const cors = require('cors');
