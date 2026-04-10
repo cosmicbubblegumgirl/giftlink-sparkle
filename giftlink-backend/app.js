@@ -1,11 +1,6 @@
-// giftlink-backend/app.js
-const connectDB = require('./db');
-
-connectDB().then(() => {
-  // Your Express app startup
-  // e.g., app.listen(PORT, () => console.log('Server running'))
-});
 /* jshint esversion: 11, node: true */
+// giftlink-backend/app.js
+
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -14,6 +9,7 @@ const giftRoutes = require('./routes/giftRoutes');
 const searchRoutes = require('./routes/searchRoutes');
 const authRoutes = require('./routes/authRoutes');
 const logger = require('./logger');
+const connectDB = require('./db');
 
 dotenv.config();
 
@@ -21,23 +17,30 @@ const app = express();
 const port = process.env.PORT || 5000;
 const frontendUrl = process.env.FRONTEND_URL || '*';
 
-app.use(cors({ origin: frontendUrl === '*' ? true : frontendUrl, credentials: true }));
+// CORS setup
+app.use(cors({
+  origin: frontendUrl === '*' ? true : frontendUrl,
+  credentials: true
+}));
 app.use(express.json());
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
-app.get('/', function (req, res) {
+// Root endpoint
+app.get('/', (req, res) => {
   res.status(200).json({
     name: 'GiftLink Sparkle API',
     message: 'A clean whimsical GiftLink build is running.'
   });
 });
 
+// API endpoints
 app.use('/api/gifts', giftRoutes);
 app.use('/api/gifts/search', searchRoutes);
 app.use('/api/auths', authRoutes);
 
-app.get('/sentiment', function (req, res) {
+// Sentiment endpoint
+app.get('/sentiment', (req, res) => {
   const text = (req.query.text || '').toLowerCase();
   let sentiment = 'neutral';
 
@@ -50,11 +53,26 @@ app.get('/sentiment', function (req, res) {
   res.status(200).json({ sentiment });
 });
 
-app.use(function (err, req, res, next) {
+// Error handling middleware
+app.use((err, req, res, next) => {
   logger.error(err.message);
-  res.status(500).json({ error: 'Internal server error', details: err.message });
+  res.status(500).json({
+    error: 'Internal server error',
+    details: err.message
+  });
 });
 
-app.listen(port, function () {
-  logger.info(`GiftLink backend listening on port ${port}`);
-});
+// Start server ONLY after DB is connected
+async function startServer() {
+  try {
+    await connectDB();
+    app.listen(port, () => {
+      logger.info(`GiftLink backend listening on port ${port}`);
+    });
+  } catch (err) {
+    logger.error("Failed to connect to MongoDB:", err);
+    process.exit(1);
+  }
+}
+
+startServer();
