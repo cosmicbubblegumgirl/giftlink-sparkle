@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: giftlink-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: giftlink-backend
+  template:
+    metadata:
+      labels:
+        app: giftlink-backend
+    spec:
+      containers:
+        - name: giftlink-backend
+          image: your-registry/giftlink-backend:latest
+          ports:
+            - containerPort: 5000

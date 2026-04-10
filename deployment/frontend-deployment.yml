@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: giftlink-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: giftlink-frontend
+  template:
+    metadata:
+      labels:
+        app: giftlink-frontend
+    spec:
+      containers:
+        - name: giftlink-frontend
+          image: your-registry/giftlink-frontend:latest
+          ports:
+            - containerPort: 80
