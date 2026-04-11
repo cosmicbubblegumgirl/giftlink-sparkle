@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import config from '../../config';
 import { useAuth } from '../../context/AuthContext';
+import { registerUser } from '../../lib/api';
 
 function RegisterPage() {
   const [form, setForm] = useState({ username: '', email: '', password: '' });
@@ -14,20 +15,7 @@ function RegisterPage() {
     setStatus('Creating your account...');
 
     try {
-      const response = await fetch(`${config.apiBaseUrl}/api/auths/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(form)
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setStatus(data.error || 'Registration failed.');
-        return;
-      }
+      const data = await registerUser(form);
 
       login({
         username: data.username,
@@ -37,7 +25,7 @@ function RegisterPage() {
 
       navigate('/app/profile');
     } catch (error) {
-      setStatus('Registration service is unavailable.');
+      setStatus(error.message || 'Registration failed.');
     }
   }
 
@@ -45,6 +33,10 @@ function RegisterPage() {
     <section className="form-card glass-card" style={{ maxWidth: 640, margin: '0 auto' }}>
       <span className="badge">✨ Join GiftLink Sparkle</span>
       <h1 className="section-title" style={{ fontSize: '2.2rem' }}>Create an account</h1>
+      <p className="section-copy">
+        Deployment URL:{' '}
+        <a href={config.deploymentUrl} target="_blank" rel="noreferrer">{config.deploymentUrl}</a>
+      </p>
       <form className="grid" onSubmit={handleSubmit}>
         <div>
           <label className="label" htmlFor="register-username">Username</label>
@@ -57,6 +49,11 @@ function RegisterPage() {
         <div>
           <label className="label" htmlFor="register-password">Password</label>
           <input id="register-password" className="input" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+        </div>
+        <div className="glass-card register-preview">
+          <span className="badge">Entered details</span>
+          <p className="section-copy"><strong>Username:</strong> {form.username || 'Not entered yet'}</p>
+          <p className="section-copy"><strong>Email:</strong> {form.email || 'Not entered yet'}</p>
         </div>
         <button className="btn btn-primary" type="submit">Register</button>
         {status && <p className="notice">{status}</p>}

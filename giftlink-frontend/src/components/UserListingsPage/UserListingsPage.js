@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import config from '../../config';
+import { getGifts } from '../../lib/api';
 
 function UserListingsPage() {
   const [gifts, setGifts] = useState([]);
 
   useEffect(() => {
-    fetch(`${config.apiBaseUrl}/api/gifts`)
-      .then((response) => response.json())
+    getGifts()
       .then((data) => setGifts(Array.isArray(data) ? data.slice(0, 2) : []))
       .catch(() => setGifts([]));
   }, []);

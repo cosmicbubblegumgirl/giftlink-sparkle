@@ -45,9 +45,11 @@ router.get('/:id', async function (req, res, next) {
       return res.status(200).json(foundGift);
     }
 
-    const query = ObjectId.isValid(req.params.id)
-      ? { _id: new ObjectId(req.params.id) }
-      : { id: req.params.id };
+    let query = { id: req.params.id };
+
+    if (ObjectId.isValid(req.params.id)) {
+      query = { _id: new ObjectId(req.params.id) };
+    }
 
     const gift = await collection.findOne(query);
 

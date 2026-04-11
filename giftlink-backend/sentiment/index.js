@@ -1,8 +1,9 @@
-import natural from 'natural';
+/* jshint esversion: 11, node: true */
+const natural = require('natural');
 
 const analyzer = new natural.SentimentAnalyzer('English', natural.PorterStemmer, 'afinn');
 
-export function analyzeText(text) {
+function analyzeText(text) {
   const tokenizer = new natural.WordTokenizer();
   const tokens = tokenizer.tokenize((text || '').toLowerCase());
   const score = analyzer.getSentiment(tokens);
@@ -17,3 +18,5 @@ export function analyzeText(text) {
 
   return 'neutral';
 }
+
+module.exports = { analyzeText };

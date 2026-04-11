@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import config from '../../config';
+import { searchGifts } from '../../lib/api';
 
 function SearchPage() {
   const [filters, setFilters] = useState({ q: '', category: '', location: '' });
   const [gifts, setGifts] = useState([]);
 
   useEffect(() => {
-    const params = new URLSearchParams();
-    if (filters.q) params.set('q', filters.q);
-    if (filters.category) params.set('category', filters.category);
-    if (filters.location) params.set('location', filters.location);
-
-    fetch(`${config.apiBaseUrl}/api/gifts/search?${params.toString()}`)
-      .then((response) => response.json())
-      .then((data) => setGifts(Array.isArray(data) ? data : []))
+    searchGifts(filters)
+      .then((data) => setGifts(data))
       .catch(() => setGifts([]));
   }, [filters]);
 
@@ -23,6 +17,7 @@ function SearchPage() {
       <div className="glass-card form-card">
         <span className="badge">🔎 Search gifts</span>
         <h1 className="section-title" style={{ fontSize: '2.4rem' }}>Search for second-hand treasures</h1>
+        <p className="section-copy">Showing {gifts.length} results that match the current criteria.</p>
         <div className="grid grid-3">
           <div>
             <label className="label" htmlFor="search-query">Keywords</label>
@@ -53,6 +48,7 @@ function SearchPage() {
           </article>
         ))}
       </div>
+      {!gifts.length && <div className="empty-state"><h2>No matching gifts found.</h2></div>}
     </section>
   );
 }

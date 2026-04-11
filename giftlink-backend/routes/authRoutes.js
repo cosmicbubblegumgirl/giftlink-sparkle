@@ -6,6 +6,7 @@ const { connectToDatabase } = require('../models/db');
 const { makeUserDocument } = require('../models/user');
 
 const router = express.Router();
+const mockUsers = [];
 
 function signToken(user) {
   return jwt.sign(
@@ -30,10 +31,21 @@ router.post('/register', async function (req, res, next) {
     }
 
     if (!db) {
+      const normalizedEmail = email.toLowerCase();
+      const existingMockUser = mockUsers.find(function (user) {
+        return user.email === normalizedEmail;
+      });
+
+      if (existingMockUser) {
+        return res.status(409).json({ error: 'Email already registered' });
+      }
+
+      mockUsers.push({ username, email: normalizedEmail, password });
+
       return res.status(201).json({
         authtoken: signToken({ email }),
         username,
-        email: email.toLowerCase(),
+        email: normalizedEmail,
         mode: 'mock'
       });
     }
@@ -64,10 +76,23 @@ router.post('/login', async function (req, res, next) {
     const { email = '', password = '' } = req.body;
 
     if (!db) {
+      const normalizedEmail = email.toLowerCase();
+      const mockUser = mockUsers.find(function (user) {
+        return user.email === normalizedEmail;
+      });
+
+      if (!mockUser) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      if (mockUser.password !== password) {
+        return res.status(401).json({ error: 'Incorrect password' });
+      }
+
       return res.status(200).json({
-        authtoken: signToken({ email }),
-        username: 'Sparkle Friend',
-        email,
+        authtoken: signToken({ email: normalizedEmail }),
+        username: mockUser.username,
+        email: normalizedEmail,
         mode: 'mock'
       });
     }

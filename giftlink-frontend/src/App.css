@@ -120,6 +120,8 @@ img { display: block; max-width: 100%; }
 .notice { padding: 12px 14px; border-radius: 16px; background: rgba(207, 233, 255, 0.7); }
 .empty-state { text-align: center; padding: 36px 20px; border-radius: var(--radius-xl); background: rgba(255,255,255,0.8); }
 .profile-header { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; align-items: center; }
+.deployment-copy { margin-top: 16px; }
+.register-preview { padding: 18px; border-radius: 22px; }
 @media (max-width: 860px) {
   .hero-card { grid-template-columns: 1fr; }
   .featured-header { align-items: start; }

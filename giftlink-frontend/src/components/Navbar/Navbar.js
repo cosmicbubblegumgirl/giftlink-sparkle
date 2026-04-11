@@ -19,7 +19,7 @@ function Navbar() {
           <Link className="nav-link" to="/app/listings">Listings</Link>
           {user ? (
             <>
-              <span className="badge">{user.username}</span>
+              <span className="badge" aria-label="logged-in-username">Signed in as {user.username}</span>
               <Link className="nav-link" to="/app/profile">Profile</Link>
               <button className="btn btn-soft" type="button" onClick={logout}>Log out</button>
             </>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import config from '../../config';
+import { getGifts } from '../../lib/api';
 
 function MainPage() {
   const [gifts, setGifts] = useState([]);
@@ -10,9 +11,8 @@ function MainPage() {
   const categories = new Set(gifts.map((gift) => gift.category).filter(Boolean)).size;
 
   useEffect(() => {
-    fetch(`${config.apiBaseUrl}/api/gifts`)
-      .then((response) => response.json())
-      .then((data) => setGifts(Array.isArray(data) ? data : []))
+    getGifts()
+      .then((data) => setGifts(data))
       .catch(() => setGifts([]));
   }, []);
 
@@ -30,6 +30,10 @@ function MainPage() {
             <Link className="btn btn-primary" to="/app/search">Browse gifts</Link>
             <Link className="btn btn-soft" to="/app/register">Create account</Link>
           </div>
+          <p className="section-copy deployment-copy">
+            Deployment URL:{' '}
+            <a href={config.deploymentUrl} target="_blank" rel="noreferrer">{config.deploymentUrl}</a>
+          </p>
         </div>
         <div className="hero-illustration" aria-hidden="true">🪄📦</div>
       </article>

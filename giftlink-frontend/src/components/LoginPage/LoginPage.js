@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import config from '../../config';
 import { useAuth } from '../../context/AuthContext';
+import { loginUser } from '../../lib/api';
 
 function LoginPage() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -14,21 +14,7 @@ function LoginPage() {
     setStatus('Opening the sparkle gate...');
 
     try {
-      const response = await fetch(`${config.apiBaseUrl}/api/auths/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer login-request'
-        },
-        body: JSON.stringify(form)
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setStatus(data.error || 'Login failed.');
-        return;
-      }
+      const data = await loginUser(form);
 
       login({
         username: data.username,
@@ -38,7 +24,7 @@ function LoginPage() {
 
       navigate('/app/profile');
     } catch (error) {
-      setStatus('Login service is unavailable.');
+      setStatus(error.message || 'Login failed.');
     }
   }
 
