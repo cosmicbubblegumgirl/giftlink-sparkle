@@ -1,30 +1,5 @@
-// giftlink-backend/db.js
-require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
-
-const uri = process.env.MONGODB_URI;
-
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
-
-async function connectDB() {
-  try {
-    await client.connect();
-    console.log("Connected to MongoDB Atlas!");
-    return client;
-  } catch (err) {
-    console.error("MongoDB connection error:", err);
-    process.exit(1);
-  }
-}
-
-module.exports = connectDB;
 /* jshint esversion: 11, node: true */
+require('dotenv').config();
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const logger = require('../logger');
 
@@ -47,9 +22,16 @@ async function connectToDatabase() {
     }
   });
 
-  await client.connect();
-  database = client.db(dbName);
-  logger.info(`Connected to ${dbName}`);
+  try {
+    await client.connect();
+    database = client.db(dbName);
+    logger.info(`Connected to ${dbName}`);
+  } catch (error) {
+    logger.warn(`Database connection unavailable: ${error.message}`);
+    client = null;
+    database = null;
+  }
+
   return database;
 }
 
