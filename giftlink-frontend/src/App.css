@@ -85,6 +85,7 @@ img { display: block; max-width: 100%; }
   font-size: 4.6rem;
 }
 .small-stat { padding: 18px; border-radius: 20px; background: rgba(255,255,255,0.84); }
+.stat-card h3 { margin: 0 0 10px; font-size: 1.45rem; }
 .nav-shell { position: sticky; top: 0; z-index: 5; backdrop-filter: blur(10px); background: rgba(255,255,255,0.76); border-bottom: 1px solid var(--line); }
 .nav-inner { max-width: 1120px; margin: 0 auto; padding: 16px 20px; display: flex; gap: 16px; align-items: center; justify-content: space-between; }
 .nav-brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.1rem; }
@@ -93,10 +94,33 @@ img { display: block; max-width: 100%; }
 .nav-link { padding: 10px 14px; border-radius: 999px; }
 .list-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
 .listing-thumb { width: 100%; height: 180px; object-fit: cover; border-radius: 18px; background: linear-gradient(135deg, var(--sky), var(--mint)); }
+.featured-shell { padding: 24px; background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 223, 147, 0.2)); }
+.featured-header { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; margin-bottom: 18px; }
+.featured-title { font-size: clamp(1.8rem, 4vw, 2.6rem); margin-bottom: 10px; }
+.featured-marquee {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(167, 184, 255, 0.24), rgba(199, 232, 213, 0.4));
+  border: 1px solid rgba(35, 50, 74, 0.08);
+}
+.featured-marquee span {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+}
 .meta-row { display: flex; gap: 8px; flex-wrap: wrap; }
 .notice { padding: 12px 14px; border-radius: 16px; background: rgba(207, 233, 255, 0.7); }
 .empty-state { text-align: center; padding: 36px 20px; border-radius: var(--radius-xl); background: rgba(255,255,255,0.8); }
 .profile-header { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; align-items: center; }
 @media (max-width: 860px) {
   .hero-card { grid-template-columns: 1fr; }
+  .featured-header { align-items: start; }
 }

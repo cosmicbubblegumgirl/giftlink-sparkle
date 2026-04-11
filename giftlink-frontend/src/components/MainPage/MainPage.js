@@ -5,6 +5,10 @@ import config from '../../config';
 function MainPage() {
   const [gifts, setGifts] = useState([]);
 
+  const featuredGifts = gifts.slice(0, 12);
+  const locations = new Set(gifts.map((gift) => gift.location).filter(Boolean)).size;
+  const categories = new Set(gifts.map((gift) => gift.category).filter(Boolean)).size;
+
   useEffect(() => {
     fetch(`${config.apiBaseUrl}/api/gifts`)
       .then((response) => response.json())
@@ -30,8 +34,46 @@ function MainPage() {
         <div className="hero-illustration" aria-hidden="true">🪄📦</div>
       </article>
 
-      <section className="list-grid">
-        {gifts.map((gift) => (
+      <section className="grid grid-3">
+        <article className="small-stat glass-card stat-card">
+          <span className="badge">Catalog sparkle</span>
+          <h3>{gifts.length} neighbor-ready listings</h3>
+          <p className="section-copy">A generous mix of practical home finds ready to browse in full search.</p>
+        </article>
+        <article className="small-stat glass-card stat-card">
+          <span className="badge">Whimsical map</span>
+          <h3>{locations} pickup spots</h3>
+          <p className="section-copy">From Maple Grove to Stonebridge, the demo catalog feels spread across real neighborhoods.</p>
+        </article>
+        <article className="small-stat glass-card stat-card">
+          <span className="badge">Useful variety</span>
+          <h3>{categories} cozy categories</h3>
+          <p className="section-copy">Lighting, kitchen, storage, office, decor, and more without crowding the landing page.</p>
+        </article>
+      </section>
+
+      <section className="glass-card featured-shell">
+        <div className="featured-header">
+          <div>
+            <span className="badge">🌼 Featured finds</span>
+            <h2 className="section-title featured-title">A small front porch of standout listings</h2>
+            <p className="section-copy">
+              The homepage keeps things light and friendly with a curated dozen. The full catalog of {gifts.length} demo listings is still waiting in search.
+            </p>
+          </div>
+          <Link className="btn btn-soft" to="/app/search">See all listings</Link>
+        </div>
+
+        <div className="featured-marquee" aria-hidden="true">
+          <span>lamp glow</span>
+          <span>tea-time treasures</span>
+          <span>soft bedroom finds</span>
+          <span>clever storage picks</span>
+          <span>garden-friendly extras</span>
+        </div>
+
+        <section className="list-grid">
+        {featuredGifts.map((gift) => (
           <article key={gift.id || gift._id} className="listing-card glass-card">
             <img className="listing-thumb" src={gift.image} alt={gift.name} />
             <div className="meta-row">
@@ -43,6 +85,7 @@ function MainPage() {
             <Link className="btn btn-primary" to={`/app/product/${gift.id || gift._id}`}>View details</Link>
           </article>
         ))}
+        </section>
       </section>
     </section>
   );
