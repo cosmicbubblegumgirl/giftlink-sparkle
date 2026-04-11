@@ -2,6 +2,7 @@
   "name": "giftlink-frontend",
   "version": "1.0.0",
   "private": true,
+  "homepage": "https://cosmicbubblegumgirl.github.io/giftlink-sparkle/",
   "dependencies": {
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
